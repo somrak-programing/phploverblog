@@ -12,7 +12,7 @@ if(isset($_GET['category'])){
     $posts = $db->select($query);
 } else{
     // Create Query
-    $query = "SELECT * FROM posts";
+    $query = "SELECT * FROM posts ORDER BY id DESC";
     // Run Query
     $posts = $db->select($query);
 }
@@ -34,6 +34,7 @@ $categories = $db->select($query);
             <p class="blog-post-meta"><?php echo formatDate($row['date']); ?> by <a href=""><?php echo $row['author']; ?></a></p>
             <p><?php echo shortenText($row['body']); ?></p>
             <a href="post.php?id=<?php echo urlencode($row['id']); ?>">Read More</a>
+            <hr>
         </div>
         <!-- blog-post   -->
 

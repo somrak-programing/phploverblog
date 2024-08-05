@@ -17,7 +17,55 @@ $query = "SELECT * FROM categories";
 $categories = $db->select($query);
 ?>
 
-<form method="post" action="edit_post.php">
+<?php
+
+if (isset($_POST['submit'])) {
+    // Assign Vars
+    $title = mysqli_real_escape_string($db->link, $_POST['title']);
+    $body = mysqli_real_escape_string($db->link, $_POST['body']);
+    $category = mysqli_real_escape_string($db->link, $_POST['category']);
+    $author = mysqli_real_escape_string($db->link, $_POST['author']);
+    $tags = mysqli_real_escape_string($db->link, $_POST['tags']);
+
+    // Simple Validation
+    if ($title == '' || $body == '' || $category == '' || $author == '') {
+        // Set Error 
+        $error = 'Please fill out all required fields';
+    } else {
+        $query = "UPDATE posts
+        SET title = '$title',
+        body = '$body',
+        category = '$category',
+        author = '$author',
+        tags = '$tags'
+        WHERE id =".$id;
+
+        $update_row = $db->update($query);
+
+        if ($update_row) {
+            header("Location: index.php?msg=" . urlencode('Record Updated'));
+            exit();
+        } else {
+            $error = 'Error: Could not add post.';
+        }
+    }
+}
+
+if (isset($_POST['delete'])) {
+    $query = "DELETE FROM posts WHERE id = " . $id;
+    $delete_row = $db->delete($query);
+
+    if ($delete_row) {
+        header("Location: index.php?msg=" . urlencode('Post Deleted'));
+        exit();
+    } else {
+        $error = 'Error: Could not delete post.';
+    }
+}
+
+?>
+
+<form method="post" action="edit_post.php?id=<?php echo $id; ?>">
     <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Post Title</label>
         <input name="title" type="text" value="<?php echo $post['title']; ?>" class="form-control" placeholder="Enter Title" aria-describedby="emailHelp">
@@ -28,6 +76,7 @@ $categories = $db->select($query);
         <textarea name="body" id="" class="form-control" placeholder="Enter Post Body"><?php echo $post['body']; ?></textarea>
     </div>
 
+    <label for="category" class="form-label">Category</label>
     <select name="category" class="form-select" aria-label="Default select example">
         <?php while ($row = $categories->fetch_assoc()) : ?>
             <?php if ($row['id'] == $post['category']) {
@@ -37,7 +86,7 @@ $categories = $db->select($query);
             }
             ?>
 
-            <option <?php echo $selected; ?>><?php echo $row['name_categories']; ?></option>
+            <option value="<?php echo $row['id']; ?>" <?php echo $selected; ?>><?php echo $row['name_categories']; ?></option>
         <?php endwhile; ?>
     </select>
 

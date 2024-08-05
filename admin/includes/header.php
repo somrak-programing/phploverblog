@@ -122,7 +122,7 @@
                     <a class="link-secondary" href="#">Subscribe</a>
                 </div>
                 <div class="col-4 text-center">
-                    <a class="blog-header-logo text-body-emphasis text-decoration-none" href="#">PHP</a>
+                    <a class="blog-header-logo text-body-emphasis text-decoration-none" href="index.php">PHP</a>
                 </div>
                 <div class="col-4 d-flex justify-content-end align-items-center">
                     <a class="link-secondary" href="#" aria-label="Search">
@@ -141,7 +141,7 @@
             <nav class="nav nav-underline justify-content-between">
                 <a class="nav-item nav-link link-body-emphasis active" href="index.php">Dashboard</a>
                 <a class="nav-item nav-link link-body-emphasis active" href="add_post.php">Add Post</a>
-                <a class="nav-item nav-link link-body-emphasis active" href="add_category">Add Category</a>
+                <a class="nav-item nav-link link-body-emphasis active" href="add_category.php">Add Category</a>
                 <a class="nav-item nav-link link-body-emphasis active pull-right" href="http://localhost/phploverblog">Visit Blog</a>
 
             </nav>
@@ -151,3 +151,8 @@
         </div>
         <div class="row">
             <div class="col-sm-12 blog-main"></div>
+            <?php if(isset($_GET['msg'])) : ?>
+                <div class="alert alert-success">
+                    <?php echo htmlentities($_GET['msg']); ?>
+                </div>
+                <?php endif; ?> 
